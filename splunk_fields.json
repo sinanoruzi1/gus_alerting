@@ -1,0 +1,73 @@
+{
+  "_comment": "match_field selects which top-level Splunk payload field is used to look up the alert definition below. 'search_name' is the saved search name in Splunk (Settings > Searches, Reports and Alerts).",
+  "match_field": "search_name",
+
+  "_burnout_comment": "default_cooldown_minutes applies to any alert def that doesn't set its own cooldown_minutes. max_sms_per_host_per_hour is a hard global cap per host regardless of alert type or cooldown - it always wins.",
+  "default_cooldown_minutes": 15,
+  "max_sms_per_host_per_hour": 10,
+
+  "alerts": {
+    "test": {
+      "display_name": "FortiGate Traffic Test Alert",
+      "severity": "Info",
+      "host_field": "devname",
+      "max_fields": 6,
+      "cooldown_minutes": 15,
+      "dedup_extra_fields": [],
+      "fields": [
+        { "key": "srcip",      "label": "Src IP" },
+        { "key": "srcport",    "label": "Src Port" },
+        { "key": "dstip",      "label": "Dst IP" },
+        { "key": "dstport",    "label": "Dst Port" },
+        { "key": "action",     "label": "Action" },
+        { "key": "policyname", "label": "Policy" }
+      ]
+    },
+
+    "fortigate_ssh_bruteforce": {
+      "display_name": "SSH Brute Force - FortiGate",
+      "severity": "Critical",
+      "host_field": "devname",
+      "max_fields": 5,
+      "cooldown_minutes": 5,
+      "dedup_extra_fields": ["srcip"],
+      "fields": [
+        { "key": "srcip",   "label": "Attacker IP" },
+        { "key": "dstip",   "label": "Target IP" },
+        { "key": "user",    "label": "User" },
+        { "key": "action",  "label": "Action" },
+        { "key": "devname", "label": "Device" }
+      ]
+    },
+
+    "ise_auth_failure_spike": {
+      "display_name": "Cisco ISE Auth Failure Spike",
+      "severity": "Warning",
+      "host_field": "host",
+      "max_fields": 4,
+      "cooldown_minutes": 15,
+      "dedup_extra_fields": ["user"],
+      "fields": [
+        { "key": "user",   "label": "User" },
+        { "key": "src_ip", "label": "Src IP" },
+        { "key": "reason", "label": "Reason" }
+      ]
+    }
+  },
+
+  "default": {
+    "display_name": "Splunk Alert",
+    "severity": "Warning",
+    "host_field": "host",
+    "max_fields": 5,
+    "cooldown_minutes": 15,
+    "dedup_extra_fields": [],
+    "fields": [
+      { "key": "host",   "label": "Host" },
+      { "key": "src",    "label": "Src" },
+      { "key": "dest",   "label": "Dst" },
+      { "key": "action", "label": "Action" },
+      { "key": "user",   "label": "User" }
+    ]
+  }
+}
